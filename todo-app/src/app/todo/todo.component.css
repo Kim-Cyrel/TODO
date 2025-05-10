@@ -1,0 +1,27 @@
+/* Custom styles for Angular Material components */
+::ng-deep .mat-mdc-menu-panel {
+  background-color: #252529 !important;
+}
+
+::ng-deep .mat-mdc-menu-item .mat-icon {
+  color: white !important;
+}
+
+::ng-deep .mat-mdc-menu-item .mdc-list-item__primary-text {
+  color: white !important;
+}
+
+::ng-deep .mat-mdc-menu-item:hover {
+  background-color: #17171a !important;
+}
+
+::ng-deep .mat-mdc-checkbox .mdc-checkbox .mdc-checkbox__native-control:enabled:checked ~ .mdc-checkbox__background {
+  border-color: transparent !important;
+  background-color: currentColor !important;
+}
+
+/* Focus styles for the edit input */
+input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+}

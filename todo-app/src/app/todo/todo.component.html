@@ -1,0 +1,90 @@
+<div class="min-h-screen bg-[#000000] flex items-center justify-center p-4">
+  <div class="w-full max-w-md space-y-6">
+    <!-- Header Card -->
+    <div class="bg-[#040c17] rounded-3xl p-6">
+      <div class="flex justify-between items-center">
+        <div>
+          <h1 class="text-white text-4xl font-bold">Todo Done</h1>
+          <p class="text-white text-2xl mt-2">{{ currentDate }}</p>
+        </div>
+        <div class="bg-white rounded-full h-24 w-24 flex items-center justify-center">
+          <span class="text-[#000000] text-3xl font-bold">
+            {{ completedCount }}/{{ totalCount }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input Field -->
+    <div class="relative">
+      <input 
+        matInput 
+        [(ngModel)]="newTodoTitle" 
+        placeholder="inpute a new task"
+        class="w-full bg-[#111112] text-white p-4 rounded-xl pl-6 pr-16 focus:outline-none"
+        (keyup.enter)="addTodo()"
+      />
+      <button 
+        mat-mini-fab 
+        class="-top-12 -right-96"
+        (click)="addTodo()"
+      >
+        <mat-icon class="text-black">add</mat-icon>
+      </button>
+    </div>
+
+    <!-- Task List -->
+    <div class="space-y-4">
+      <div *ngFor="let todo of todos" class="bg-[#17171a] rounded-xl p-4 flex items-center">
+        <!-- Checkbox -->
+        <button 
+          class="h-6 w-6 rounded border flex-shrink-0 flex items-center justify-center"
+          [ngClass]="todo.completed ? 'border-0' : 'border-[#252529] bg-transparent'"
+          [ngStyle]="{'background-color': todo.completed ? getCheckboxColor(todo) : 'transparent'}"
+          (click)="todo.completed = !todo.completed; updateTodo(todo)"
+        >
+          <mat-icon *ngIf="todo.completed" class="text-white text-sm" style="font-size: 14px; height: 14px; width: 14px;">check</mat-icon>
+        </button>
+        
+        <!-- Task Text (Normal or Editing Mode) -->
+        <ng-container *ngIf="editingTodoId !== todo.id; else editingTemplate">
+          <span class="ml-4 text-white text-lg flex-grow">{{ todo.title }}</span>
+        </ng-container>
+        
+        <ng-template #editingTemplate>
+          <div class="ml-4 flex-grow flex items-center">
+            <input 
+              matInput 
+              [(ngModel)]="editText" 
+              class="w-full bg-[#252529] text-white p-2 rounded focus:outline-none"
+              (keyup.enter)="saveEdit(todo)"
+              (keyup.escape)="cancelEdit()"
+              #editInput
+            />
+            <button mat-icon-button (click)="saveEdit(todo)" class="text-white ml-2">
+              <mat-icon>check</mat-icon>
+            </button>
+            <button mat-icon-button (click)="cancelEdit()" class="text-white">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </ng-template>
+        
+        <!-- Three Dot Menu -->
+        <button mat-icon-button [matMenuTriggerFor]="menu" class="text-white" *ngIf="editingTodoId !== todo.id">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu" class="bg-[#252529]">
+          <button mat-menu-item (click)="startEditing(todo)" class="text-white">
+            <mat-icon>edit</mat-icon>
+            <span>Edit</span>
+          </button>
+          <button mat-menu-item (click)="deleteTodo(todo.id)" class="text-white">
+            <mat-icon>delete</mat-icon>
+            <span>Delete</span>
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+  </div>
+</div>
